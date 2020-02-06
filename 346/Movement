@@ -1,0 +1,74 @@
+//Movement for PS4 and PC using basic input mangager with additional buttons added 
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class movement : MonoBehaviour
+{
+    [SerializeField] Transform[] spawnpointTran;
+    [SerializeField] GameObject enemy;
+    [SerializeField] GameObject bullet;
+    bool bFiring;
+    static bool bGameover;
+    // Start is called before the first frame update
+    void Start()
+    {
+        bFiring = false;
+        StartCoroutine(timer());
+        bGameover = false;
+    }
+    // Update is called once per frame
+    void update(){}
+    private void FixedUpdate()
+    {
+        if (Input.GetAxis("Horizontal") > 0.2f)
+        {
+            float x = Input.GetAxis("Horizontal");
+            transform.position += new Vector3(x, 0, 0) * Time.deltaTime * 10;
+        }
+        if (Input.GetAxis("Horizontal") < 0.2f)
+        {
+            float x = Input.GetAxis("Horizontal");
+            transform.position += new Vector3(x, 0, 0) * Time.deltaTime * 10;
+        }
+        if (Input.GetAxis("Shoot") > 0.2)
+        {
+            if (!bFiring)
+            {
+                bFiring = true;
+                spawnBullet();
+            }
+           
+        }
+        if (!bGameover)
+        {
+            transform.position += new Vector3(0, 0, 1) * Time.deltaTime * 10;
+        }
+    }
+
+    void spawnEnemy()
+    {
+        int rand = Random.Range(0, 3);
+        GameObject enemyObj = Instantiate(enemy, spawnpointTran[rand].position, Quaternion.identity);
+
+    }
+    private IEnumerator timer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        spawnEnemy();
+        StartCoroutine(timer());
+
+    }
+    void spawnBullet()
+    {
+        GameObject bulletObj = Instantiate(bullet, transform.position + new Vector3(0,0,3), Quaternion.identity);
+        bFiring = false;
+    }
+    public void gameoverZ()
+    {
+        bGameover = true;
+        StopAllCoroutines(); 
+    }
+}
