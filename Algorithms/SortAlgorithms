@@ -1,0 +1,103 @@
+void bubble()
+    {
+        int[] list = new int[]{3,8,1,4,7,6,3,2};
+        int itemSwapped = 0;
+        int loopCount = 0;
+        bool isSwaped = true;
+        while (isSwaped)
+        {
+            isSwaped = false;
+            for (int i=0; i < list.Length-1;i++)
+            {
+                if (list[i] > list[i+1])
+                {
+                    int temp = list[i];
+                    list[i] = list[i+1];
+                    list[i+1] = temp;
+                    isSwaped = true;
+                    itemSwapped++;
+                }
+                loopCount++;
+            }
+        }
+        print(itemSwapped + " items swapped");
+        print(loopCount + " loops");
+    }
+    
+    
+    void betterBubble()
+    {
+        //Improves the number of loops ran during sort
+        int[] list = new int[] { 3, 8, 1, 4, 7, 6, 3,2 };
+        int size = list.Length;
+        bool isSwaped = true;
+        int itemSwapped = 0;
+        int iLoops = 0;
+        while (isSwaped)
+        {
+            isSwaped = false;
+            for (int i = 0; i < size-1; i++)
+            {
+                if (list[i] > list[i+1])
+                {
+                    int temp = list[i];
+                    list[i] = list[i + 1];
+                    list[i + 1] = temp;
+                    isSwaped = true;
+                    itemSwapped++;
+                }
+                iLoops++;
+            }
+            size--;
+        }
+        print(iLoops + " loops");
+        print(itemSwapped + " items swapped");
+    }
+    
+    void histogramSort()
+    {
+        Dictionary<int, int> counterDict = new Dictionary<int, int>();
+        int[] valueList = new int[] { 2, 1, 4, 2, 3, 1, 4, 1 };
+        int[] order = new int[valueList.Length];
+        List<int> value = new List<int>(valueList.Length);
+        for (int x = 0; x < order.Length; x++)
+        {
+            order[x] = -1;
+        }
+        int orginalSize = valueList.Length;
+        for (int i = 0; i < valueList.Length; i++)
+        {
+            if (counterDict.ContainsKey(valueList[i])) {
+                counterDict[valueList[i]] += 1;
+            }
+            else
+            {           
+                order[valueList[i]] = valueList[i];
+                counterDict.Add(valueList[i], 1);
+            }
+        }
+        for (int j=0; j < orginalSize; j++)
+        {
+            if (order[j] == -1)
+            {
+                continue;
+            }
+            else
+            {
+                if (counterDict.ContainsKey(order[j]))
+                {
+                    int iNumberOfDups = counterDict[order[j]];
+                    for (int k = 0; k < iNumberOfDups; k++)
+                    {
+                        value.Add(order[j]);
+                    }
+                }
+            }
+        }
+        foreach (int p in value)
+        {
+            print(p);
+        }
+    }
+    
+    
