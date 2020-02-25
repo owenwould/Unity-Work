@@ -1,9 +1,63 @@
-void bubble()
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+
+public class x : MonoBehaviour
+{
+    int[] list3 = new int[100000]; 
+    String timeStart,timeEnd,c,d;
+    // Start is called before the first frame update
+    void Start()
     {
-        int[] list = new int[]{3,8,1,4,7,6,3,2};
+        
+        //betterBubble();
+        //histogramSort();
+
+        System.Random random = new System.Random();
+
+        
+        for (int i=0; i < list3.Length; i++)
+        {
+            list3[i] = random.Next(1, 1000);
+        }
+        timeStart = "Start Time merge " + DateTime.Now.ToString();
+        print(timeStart);
+
+
+
+
+
+
+        int[] list2 = mergeSort(list3);
+        timeEnd = "End time merge " + DateTime.Now.ToString();
+        print(timeEnd);
+
+
+
+        bubble();
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+
+    void bubble()
+    {
+        c = "Start Time Bubble " + DateTime.Now.ToString();
+        print(c);
+        int[] list = list3;
+
         int itemSwapped = 0;
         int loopCount = 0;
+
         bool isSwaped = true;
+
         while (isSwaped)
         {
             isSwaped = false;
@@ -19,20 +73,27 @@ void bubble()
                 }
                 loopCount++;
             }
+
         }
-        print(itemSwapped + " items swapped");
-        print(loopCount + " loops");
+
+        //print(itemSwapped + " items swapped");
+        //print(loopCount + " loops");
+        d = "End Time Bubble " + DateTime.Now.ToString();
+        print(d);
+       
     }
-    
-    
+
+
     void betterBubble()
     {
         //Improves the number of loops ran during sort
         int[] list = new int[] { 3, 8, 1, 4, 7, 6, 3,2 };
         int size = list.Length;
         bool isSwaped = true;
+
         int itemSwapped = 0;
         int iLoops = 0;
+
         while (isSwaped)
         {
             isSwaped = false;
@@ -50,10 +111,14 @@ void bubble()
             }
             size--;
         }
+
         print(iLoops + " loops");
         print(itemSwapped + " items swapped");
+
+
     }
-    
+
+
     void histogramSort()
     {
         Dictionary<int, int> counterDict = new Dictionary<int, int>();
@@ -64,7 +129,9 @@ void bubble()
         {
             order[x] = -1;
         }
+
         int orginalSize = valueList.Length;
+
         for (int i = 0; i < valueList.Length; i++)
         {
             if (counterDict.ContainsKey(valueList[i])) {
@@ -76,6 +143,7 @@ void bubble()
                 counterDict.Add(valueList[i], 1);
             }
         }
+        
         for (int j=0; j < orginalSize; j++)
         {
             if (order[j] == -1)
@@ -94,10 +162,108 @@ void bubble()
                 }
             }
         }
+        
+
         foreach (int p in value)
         {
             print(p);
         }
     }
-    
-    
+
+    void doubleBubble()
+    {
+
+    }
+
+     int[] mergeSort(int[] array)
+    {
+        int[] left;
+        int[] right;
+        int[] results = new int[array.Length];
+
+        if (array.Length <= 1)
+        {
+            return array;
+        }
+
+        int midPoint = array.Length / 2;
+        left = new int[midPoint];
+
+
+        if (array.Length % 2 ==0)
+        {
+            right = new int[midPoint];
+        }
+        else
+        {
+            right = new int[midPoint + 1];
+        }
+
+
+        for (int i = 0; i < midPoint; i++)
+        {
+            left[i] = array[i];
+        }
+
+        int x = 0;
+
+        for (int i = midPoint; i < array.Length; i++)
+        {
+            right[x] = array[i];
+            x++;
+        }
+
+        left = mergeSort(left);
+        right = mergeSort(right);
+        results = merge(left, right);
+
+
+        return results;
+    }
+
+
+
+    int[] merge(int[] left, int[] right)
+    {
+        int resultLength = right.Length + left.Length;
+        int[] result = new int[resultLength];
+
+        int indexLeft = 0, indexRight = 0, indexResult = 0;
+        while (indexLeft < left.Length || indexRight < right.Length)
+        {
+            if (indexLeft < left.Length && indexRight < right.Length)
+            {
+                if (left[indexLeft] <= right[indexRight])
+                {
+                    result[indexResult] = left[indexLeft];
+                    indexLeft++;
+                    indexResult++;
+                }
+                else
+                {
+                    result[indexResult] = right[indexRight];
+                    indexRight++;
+                    indexResult++;
+                }
+            }
+            else if (indexLeft < left.Length)
+            {
+                result[indexResult] = left[indexLeft];
+                indexLeft++;
+                indexResult++;
+            }
+            else if (indexRight < right.Length)
+            {
+                result[indexResult] = right[indexRight];
+                indexRight++;
+                indexResult++;
+            }
+        }
+        
+        return result;
+    }
+
+
+
+
+}
