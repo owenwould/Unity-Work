@@ -5,37 +5,54 @@ using System;
 
 public class x : MonoBehaviour
 {
-    int[] list3 = new int[100000]; 
-    String timeStart,timeEnd,c,d;
+    int[] list3 = new int[10000000];
+    String timeStart, timeEnd, c, d;
     // Start is called before the first frame update
     void Start()
     {
-        
+
         //betterBubble();
         //histogramSort();
 
         System.Random random = new System.Random();
 
-        
-        for (int i=0; i < list3.Length; i++)
+
+        for (int i = 0; i < list3.Length; i++)
         {
-            list3[i] = random.Next(1, 1000);
+            list3[i] = random.Next(1, 100000);
         }
-        timeStart = "Start Time merge " + DateTime.Now.ToString();
-        print(timeStart);
 
-
-
-
-
+       // timeStart = "Start Time merge " + DateTime.Now.ToString();
+        //print(timeStart);
 
         int[] list2 = mergeSort(list3);
-        timeEnd = "End time merge " + DateTime.Now.ToString();
-        print(timeEnd);
+
+        //timeEnd = "End time merge " + DateTime.Now.ToString();
+        //print(timeEnd);
+
+        //timeStart = "Start Time bubble " + DateTime.Now.ToString();
+        //print(timeStart);
+        //bubble();
+        //timeEnd = "End time bubble " + DateTime.Now.ToString();
+        //print(timeEnd);
 
 
+        
+        
+        for (int i=0; i < 2;i++)
+        {
+            int randomIndex = random.Next(1, list2.Length);
+            int magicNum = list2[randomIndex];
+            jumpSearch(list2, magicNum, i);
+        }
 
-        bubble();
+        for (int j=0; j < 2; j++)
+        {
+            int randomIndex = random.Next(1, list2.Length);
+            int magicNum = list2[randomIndex];
+            linearSearch(list2, magicNum, j);
+        }
+
 
 
     }
@@ -43,14 +60,14 @@ public class x : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
     void bubble()
     {
-        c = "Start Time Bubble " + DateTime.Now.ToString();
-        print(c);
+        //c = "Start Time Bubble " + DateTime.Now.ToString();
+        //print(c);
         int[] list = list3;
 
         int itemSwapped = 0;
@@ -61,13 +78,13 @@ public class x : MonoBehaviour
         while (isSwaped)
         {
             isSwaped = false;
-            for (int i=0; i < list.Length-1;i++)
+            for (int i = 0; i < list.Length - 1; i++)
             {
-                if (list[i] > list[i+1])
+                if (list[i] > list[i + 1])
                 {
                     int temp = list[i];
-                    list[i] = list[i+1];
-                    list[i+1] = temp;
+                    list[i] = list[i + 1];
+                    list[i + 1] = temp;
                     isSwaped = true;
                     itemSwapped++;
                 }
@@ -78,16 +95,16 @@ public class x : MonoBehaviour
 
         //print(itemSwapped + " items swapped");
         //print(loopCount + " loops");
-        d = "End Time Bubble " + DateTime.Now.ToString();
-        print(d);
-       
+        //d = "End Time Bubble " + DateTime.Now.ToString();
+        //print(d);
+
     }
 
 
     void betterBubble()
     {
         //Improves the number of loops ran during sort
-        int[] list = new int[] { 3, 8, 1, 4, 7, 6, 3,2 };
+        int[] list = new int[] { 3, 8, 1, 4, 7, 6, 3, 2 };
         int size = list.Length;
         bool isSwaped = true;
 
@@ -97,9 +114,9 @@ public class x : MonoBehaviour
         while (isSwaped)
         {
             isSwaped = false;
-            for (int i = 0; i < size-1; i++)
+            for (int i = 0; i < size - 1; i++)
             {
-                if (list[i] > list[i+1])
+                if (list[i] > list[i + 1])
                 {
                     int temp = list[i];
                     list[i] = list[i + 1];
@@ -134,17 +151,18 @@ public class x : MonoBehaviour
 
         for (int i = 0; i < valueList.Length; i++)
         {
-            if (counterDict.ContainsKey(valueList[i])) {
+            if (counterDict.ContainsKey(valueList[i]))
+            {
                 counterDict[valueList[i]] += 1;
             }
             else
-            {           
+            {
                 order[valueList[i]] = valueList[i];
                 counterDict.Add(valueList[i], 1);
             }
         }
-        
-        for (int j=0; j < orginalSize; j++)
+
+        for (int j = 0; j < orginalSize; j++)
         {
             if (order[j] == -1)
             {
@@ -162,7 +180,7 @@ public class x : MonoBehaviour
                 }
             }
         }
-        
+
 
         foreach (int p in value)
         {
@@ -170,12 +188,9 @@ public class x : MonoBehaviour
         }
     }
 
-    void doubleBubble()
-    {
+    
 
-    }
-
-     int[] mergeSort(int[] array)
+    int[] mergeSort(int[] array)
     {
         int[] left;
         int[] right;
@@ -190,7 +205,7 @@ public class x : MonoBehaviour
         left = new int[midPoint];
 
 
-        if (array.Length % 2 ==0)
+        if (array.Length % 2 == 0)
         {
             right = new int[midPoint];
         }
@@ -259,8 +274,55 @@ public class x : MonoBehaviour
                 indexResult++;
             }
         }
-        
+
         return result;
+    }
+
+    void jumpSearch(int[] list,int magicNumber,int testNum)
+    {
+        int step = (int)Mathf.Sqrt(list.Length);
+        int iNumberChecks = 0;
+        print("Start Jump Search: " + testNum + "time miliseconds " + DateTime.Now.Millisecond.ToString());
+
+        for (int i = step; i < list.Length; i+=step)
+        {
+            iNumberChecks++;
+            if (list[i] == magicNumber)
+            {
+                print("End Jump Search: " + testNum + " Total Number of checks " + iNumberChecks + " time miliseconds " + DateTime.Now.Millisecond.ToString());
+                return;
+            }
+            else if (list[i] > magicNumber)
+            {
+                for (int j = i; j > 0; j--)
+                {
+                    iNumberChecks++;
+                    if (list[j] == magicNumber)
+                    {
+                        print("End Jump Search: " + testNum + " Total Number of checks " + iNumberChecks + " time miliseconds " + DateTime.Now.Millisecond.ToString());
+                        return;
+                    }
+                }
+            }
+
+        }
+
+
+    }
+
+    void linearSearch(int[] list, int magicNumber,int testNum)
+    {
+        int iNumberChecks = 0;
+        print("Start Linear Search: " + DateTime.Now.Millisecond.ToString());
+        for (int i=0; i < list.Length; i++)
+        {
+            iNumberChecks++;
+            if (list[i] == magicNumber)
+            {
+               print("End Linear Search: " + testNum + " Total Number of checks " + iNumberChecks + "end time milliseconds " + DateTime.Now.Millisecond.ToString());
+               return;
+            }
+        }
     }
 
 
